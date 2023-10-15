@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.litongjava.localmusic.R;
 import com.litongjava.localmusic.constants.MessageConstants;
 import com.litongjava.localmusic.model.MessageWrap;
-import com.litongjava.localmusic.properties.MemoryProp;
+import com.litongjava.localmusic.properties.MemoryPropKeys;
 
 import org.greenrobot.eventbus.EventBus;
 import org.slf4j.Logger;
@@ -65,7 +65,7 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<MusicRecycler
         EventBus.getDefault().post(MessageWrap.getInstance(MessageConstants.go_to_music_list, args));
 
       } else {
-        MemoryProp.current_music_path = path;
+        MemoryPropKeys.current_music_path = path;
         Map<String, Object> playMusicArgs = new HashMap<>(3);
         playMusicArgs.put("music_list", musicList);
         playMusicArgs.put("folder_list", folderList);

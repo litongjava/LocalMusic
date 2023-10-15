@@ -19,7 +19,10 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.video.VideoSize;
-import com.litongjava.localmusic.properties.MemoryProp;
+import com.litongjava.jfinal.aop.Aop;
+import com.litongjava.localmusic.properties.MemoryPropKeys;
+import com.litongjava.project.config.ConfigKeys;
+import com.litongjava.project.config.ProjectConfig;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +41,7 @@ public class ExoPlayerInstance {
   public static int currentTrackIndex = 0;
 
   public static SimpleExoPlayer getInstance(Context context) {
+
     SimpleExoPlayer.Builder builder = new SimpleExoPlayer.Builder(context);
     player = builder.build();
     //noinspection deprecation
@@ -51,7 +55,9 @@ public class ExoPlayerInstance {
       public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
         if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO) {
           currentTrackIndex++;
-          if (MemoryProp.play_max_tracks != null && currentTrackIndex >= MemoryProp.play_max_tracks) {
+          ProjectConfig projectConfig = Aop.get(ProjectConfig.class);
+          Integer play_max_tracks = projectConfig.getInt(ConfigKeys.play_max_tracks);
+          if (play_max_tracks != null && currentTrackIndex % play_max_tracks >= play_max_tracks) {
             // 停止播放
             player.setPlayWhenReady(false);
           }
