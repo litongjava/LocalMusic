@@ -3,6 +3,7 @@ package com.litongjava.localmusic.fragment;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +83,9 @@ public class PlayerFragment extends Fragment {
   @OnClick(R.id.gotoBtn)
   public void gotoBtn_OnClick(View v) {
     SimpleExoPlayer exoPlayer = ExoPlayerInstance.getExoPlayer();
-    long l = Long.parseLong(gotoText.toString());
+    String text = gotoText.getText().toString();
+    log.info("seek to text :{}", text);
+    long l = Long.parseLong(text);
     log.info("seek to:{}", l);
     exoPlayer.seekTo(l);
   }

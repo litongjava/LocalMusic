@@ -11,6 +11,8 @@ import com.litongjava.localmusic.constants.SPConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
 public class MusicApplication extends Application {
   private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -19,6 +21,19 @@ public class MusicApplication extends Application {
     log.info("onCreate");
     super.onCreate();
     initAop();
+    initLog();
+  }
+
+  private void initLog() {
+    File logDir = new File(this.getBaseContext().getExternalFilesDir(null), "logs");
+    log.info("path:{}", logDir.getAbsolutePath());
+    if (!logDir.exists()) {
+      boolean mkdirs = logDir.mkdirs();
+      if (!mkdirs) {
+        log.error("Failed to create log dir");
+      }
+    }
+
   }
 
   private void initAop() {
