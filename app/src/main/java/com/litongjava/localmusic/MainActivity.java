@@ -21,6 +21,7 @@ import com.litongjava.android.view.inject.annotation.FindViewById;
 import com.litongjava.android.view.inject.annotation.FindViewByIdLayout;
 import com.litongjava.android.view.inject.annotation.OnClick;
 import com.litongjava.android.view.inject.utils.ViewInjectUtils;
+import com.litongjava.jfinal.aop.AopManager;
 import com.litongjava.localmusic.constants.MessageConstants;
 import com.litongjava.localmusic.constants.SPConstants;
 import com.litongjava.localmusic.fragment.MainFragment;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     initView();
     initPermission();
   }
+
 
   @Override
   public void onDestroy() {

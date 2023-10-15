@@ -1,6 +1,7 @@
 package com.litongjava.localmusic.instance;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,9 +21,7 @@ import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.video.VideoSize;
 import com.litongjava.jfinal.aop.Aop;
-import com.litongjava.localmusic.properties.MemoryPropKeys;
-import com.litongjava.project.config.ConfigKeys;
-import com.litongjava.project.config.ProjectConfig;
+import com.litongjava.localmusic.constants.SPConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,9 +54,10 @@ public class ExoPlayerInstance {
       public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
         if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO) {
           currentTrackIndex++;
-          ProjectConfig projectConfig = Aop.get(ProjectConfig.class);
-          Integer play_max_tracks = projectConfig.getInt(ConfigKeys.play_max_tracks);
-          if (play_max_tracks != null && currentTrackIndex % play_max_tracks >= play_max_tracks) {
+          SharedPreferences sharedPreferences = Aop.get(SharedPreferences.class);
+          int playMaxTracks = sharedPreferences.getInt(SPConstants.play_max_tracks, 0);
+          log.info("currentTrackIndex,{},playMaxTracks:{}",currentTrackIndex,playMaxTracks);
+          if (playMaxTracks != 0 && currentTrackIndex % playMaxTracks ==0) {
             // 停止播放
             player.setPlayWhenReady(false);
           }

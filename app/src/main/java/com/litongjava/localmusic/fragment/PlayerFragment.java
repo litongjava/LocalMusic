@@ -1,6 +1,7 @@
 package com.litongjava.localmusic.fragment;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +20,9 @@ import com.litongjava.android.view.inject.annotation.OnClick;
 import com.litongjava.android.view.inject.utils.ViewInjectUtils;
 import com.litongjava.jfinal.aop.Aop;
 import com.litongjava.localmusic.R;
+import com.litongjava.localmusic.constants.SPConstants;
 import com.litongjava.localmusic.instance.ExoPlayerInstance;
 import com.litongjava.localmusic.properties.MemoryPropKeys;
-import com.litongjava.project.config.ConfigKeys;
-import com.litongjava.project.config.ProjectConfig;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,6 @@ public class PlayerFragment extends Fragment {
   @FindViewById(R.id.playMaxTracksTextView)
   public TextView playMaxTracksTextView;
 
-  ProjectConfig projectConfig = Aop.get(ProjectConfig.class);
 
   @Nullable
   @Override
@@ -78,7 +77,9 @@ public class PlayerFragment extends Fragment {
 
   private void referesh() {
     playCurrentTracksTextView.setText("Current:" + ExoPlayerInstance.currentTrackIndex);
-    playMaxTracksTextView.setText("Max:" + projectConfig.getInt(ConfigKeys.play_max_tracks));
+    SharedPreferences sharedPreferences = Aop.get(SharedPreferences.class);
+    int play_max_tracks = sharedPreferences.getInt(SPConstants.play_max_tracks, 0);
+    playMaxTracksTextView.setText("Max:" + play_max_tracks);
   }
 
   private void showDialog() {
@@ -89,7 +90,10 @@ public class PlayerFragment extends Fragment {
         @Override
         public void onClick(DialogInterface dialogInterface, int selectedIndex) {
           // 在这里处理选择的选项
-          projectConfig.put(ConfigKeys.play_max_tracks, selectedIndex + 1);
+          SharedPreferences sharedPreferences = Aop.get(SharedPreferences.class);
+          SharedPreferences.Editor editor = sharedPreferences.edit();
+          editor.putInt(SPConstants.play_max_tracks, selectedIndex + 1);
+          editor.apply();
           // 可以根据选择执行不同的操作
           ExoPlayerInstance.updateData();
           referesh();
