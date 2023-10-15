@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,6 +42,8 @@ public class PlayerFragment extends Fragment {
 
   @FindViewById(R.id.playMaxTracksTextView)
   public TextView playMaxTracksTextView;
+  @FindViewById(R.id.gotoText)
+  private EditText gotoText;
 
 
   @Nullable
@@ -73,6 +77,14 @@ public class PlayerFragment extends Fragment {
   @OnClick(R.id.RefereshBtn)
   public void refereshBtn_onClick(View v) {
     referesh();
+  }
+
+  @OnClick(R.id.gotoBtn)
+  public void gotoBtn_OnClick(View v) {
+    SimpleExoPlayer exoPlayer = ExoPlayerInstance.getExoPlayer();
+    long l = Long.parseLong(gotoText.toString());
+    log.info("seek to:{}", l);
+    exoPlayer.seekTo(l);
   }
 
   private void referesh() {

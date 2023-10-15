@@ -38,6 +38,23 @@
       android:text="Referesh"></Button>
   </LinearLayout>
 
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+      android:id="@+id/gotoBtn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="GoTo"></Button>
+
+    <EditText
+      android:id="@+id/gotoText"
+      android:layout_width="100dp"
+      android:layout_height="wrap_content" />
+  </LinearLayout>
+
 
   <com.google.android.exoplayer2.ui.StyledPlayerView
     android:id="@+id/styled_player_view"
