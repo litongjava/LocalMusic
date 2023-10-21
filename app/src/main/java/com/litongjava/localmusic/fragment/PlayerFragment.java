@@ -1,9 +1,11 @@
 package com.litongjava.localmusic.fragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +15,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.litongjava.android.utils.toast.ToastUtils;
 import com.litongjava.android.view.inject.annotation.FindViewById;
 import com.litongjava.android.view.inject.annotation.OnClick;
 import com.litongjava.android.view.inject.utils.ViewInjectUtils;
@@ -26,12 +30,21 @@ import com.litongjava.localmusic.R;
 import com.litongjava.localmusic.constants.SPConstants;
 import com.litongjava.localmusic.instance.ExoPlayerInstance;
 import com.litongjava.localmusic.properties.MemoryPropKeys;
+import com.litongjava.localmusic.utils.AssetUtils;
+import com.litongjava.localmusic.utils.WaveEncoder;
+import com.whispercppdemo.whisper.WhisperContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+
 public class PlayerFragment extends Fragment {
   private Logger log = LoggerFactory.getLogger(this.getClass());
+  private WhisperContext whisperContext;
 
   @FindViewById(R.id.musicTitile)
   private TextView musicTitile;
@@ -45,6 +58,12 @@ public class PlayerFragment extends Fragment {
   public TextView playMaxTracksTextView;
   @FindViewById(R.id.gotoText)
   private EditText gotoText;
+
+  @FindViewById(R.id.asrBtn)
+  private Button asrBtn;
+
+  @FindViewById(R.id.text)
+  private TextView text;
 
 
   @Nullable
@@ -88,6 +107,80 @@ public class PlayerFragment extends Fragment {
     long l = Long.parseLong(text);
     log.info("seek to:{}", l);
     exoPlayer.seekTo(l);
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.O)
+  @OnClick(R.id.loadModelBtn)
+  public void loadModelBtn_OnClick(View v) {
+    loadModel();
+    ToastUtils.defaultToast(getContext(), "model loaded");
+
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.O)
+  @OnClick(R.id.asrBtn)
+  public void asrBtn_OnClick(View v) {
+    // 加载模型
+    loadModel();
+    //识别样本
+    transcribeSample();
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.O)
+  private void loadModel() {
+    Context context = getContext();
+    File filesDir = context.getFilesDir();
+    String modelFilePath = "models/ggml-tiny.bin";
+    File modelFile = AssetUtils.copyFileIfNotExists(context, filesDir, modelFilePath);
+    modelFilePath = modelFile.getAbsolutePath();
+
+    log.info("load model from :{}", modelFilePath);
+    if (whisperContext == null) {
+      whisperContext = WhisperContext.createContextFromFile(modelFilePath);
+    }
+  }
+
+  private void transcribeSample() {
+    Context context = getContext();
+    File filesDir = context.getFilesDir();
+    String sampleFilePath = "samples/jfk.wav";
+    File sampleFile = AssetUtils.copyFileIfNotExists(context, filesDir, sampleFilePath);
+    // 识别样本
+    log.info("transcribe file from :{}", sampleFile.getAbsolutePath());
+    float[] audioData = new float[0];  // 读取音频样本
+    try {
+      audioData = WaveEncoder.decodeWaveFile(sampleFile);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    String transcription = null;  // 转录音频数据
+    try {
+      transcription = whisperContext.transcribeData(audioData);
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    log.info("Transcription: {}", transcription);  // 打印转录结果
+    text.setText(transcription);
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.O)
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    if (whisperContext != null) {
+      try {
+        whisperContext.release();
+      } catch (ExecutionException e) {
+        e.printStackTrace();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      } finally {
+        whisperContext = null;
+      }
+    }
   }
 
   private void referesh() {
