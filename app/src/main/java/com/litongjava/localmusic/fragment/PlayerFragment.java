@@ -3,7 +3,6 @@ package com.litongjava.localmusic.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,7 +19,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.text.Cue;
+import com.google.android.exoplayer2.ui.PlayerControlView;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerControlView;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.google.android.exoplayer2.ui.SubtitleView;
 import com.litongjava.android.utils.toast.ToastUtils;
 import com.litongjava.android.view.inject.annotation.FindViewById;
 import com.litongjava.android.view.inject.annotation.OnClick;
@@ -30,6 +34,7 @@ import com.litongjava.localmusic.R;
 import com.litongjava.localmusic.constants.SPConstants;
 import com.litongjava.localmusic.instance.ExoPlayerInstance;
 import com.litongjava.localmusic.properties.MemoryPropKeys;
+import com.litongjava.localmusic.services.PlayerService;
 import com.litongjava.localmusic.utils.AssetUtils;
 import com.litongjava.localmusic.utils.WaveEncoder;
 import com.whispercppdemo.whisper.WhisperContext;
@@ -39,7 +44,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class PlayerFragment extends Fragment {
@@ -59,12 +65,17 @@ public class PlayerFragment extends Fragment {
   @FindViewById(R.id.gotoText)
   private EditText gotoText;
 
-  @FindViewById(R.id.asrBtn)
+  @FindViewById(R.id.asrTestBtn)
   private Button asrBtn;
 
   @FindViewById(R.id.text)
   private TextView text;
 
+  @FindViewById(R.id.aSubtitleView)
+  private SubtitleView aSubtitleView;
+
+//  @FindViewById(R.id.exo_controller)
+//  private PlayerControlView playerView;
 
   @Nullable
   @Override
@@ -101,12 +112,25 @@ public class PlayerFragment extends Fragment {
 
   @OnClick(R.id.gotoBtn)
   public void gotoBtn_OnClick(View v) {
-    SimpleExoPlayer exoPlayer = ExoPlayerInstance.getExoPlayer();
     String text = gotoText.getText().toString();
-    log.info("seek to text :{}", text);
-    long l = Long.parseLong(text);
-    log.info("seek to:{}", l);
-    exoPlayer.seekTo(l);
+    Aop.get(PlayerService.class).seekTo(text);
+  }
+
+  //  @OnClick(R.id.checkCurrentTrackBtn)
+  public void checkCurrentTrackBtn_onClick(View v) {
+    Aop.get(PlayerService.class).checkCurrentTrack();
+  }
+
+  @OnClick(R.id.addSubTitleBtn)
+  public void addSubTitleBtn_onClick(View v) {
+    Cue cue = new Cue("This is your subtitle text.");
+    List<Cue> cues = Collections.singletonList(cue);
+    aSubtitleView.onCues(cues);
+  }
+
+  //  @OnClick(R.id.checkTextComponentBtn)
+  public void checkTextComponentBtn_OnClick(View view) {
+    Aop.get(PlayerService.class).checkTextComponent();
   }
 
   @RequiresApi(api = Build.VERSION_CODES.O)
@@ -114,11 +138,10 @@ public class PlayerFragment extends Fragment {
   public void loadModelBtn_OnClick(View v) {
     loadModel();
     ToastUtils.defaultToast(getContext(), "model loaded");
-
   }
 
   @RequiresApi(api = Build.VERSION_CODES.O)
-  @OnClick(R.id.asrBtn)
+  @OnClick(R.id.asrTestBtn)
   public void asrBtn_OnClick(View v) {
     // 加载模型
     loadModel();

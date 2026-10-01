@@ -13,14 +13,18 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.text.Cue;
+import com.google.android.exoplayer2.ui.SubtitleView;
 import com.litongjava.android.utils.acp.AcpUtils;
 import com.litongjava.android.utils.toast.ToastUtils;
 import com.litongjava.android.view.inject.annotation.FindViewById;
 import com.litongjava.android.view.inject.annotation.FindViewByIdLayout;
 import com.litongjava.android.view.inject.annotation.OnClick;
 import com.litongjava.android.view.inject.utils.ViewInjectUtils;
+import com.litongjava.jfinal.aop.Aop;
 import com.litongjava.jfinal.aop.AopManager;
 import com.litongjava.localmusic.constants.MessageConstants;
 import com.litongjava.localmusic.constants.SPConstants;
@@ -31,6 +35,7 @@ import com.litongjava.localmusic.fragment.PlayerFragment;
 import com.litongjava.localmusic.instance.ExoPlayerInstance;
 import com.litongjava.localmusic.model.MessageWrap;
 import com.litongjava.localmusic.services.MainServices;
+import com.litongjava.localmusic.services.PlayerService;
 import com.mylhyl.acp.AcpListener;
 
 import org.greenrobot.eventbus.EventBus;
@@ -78,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
   @FindViewById(R.id.bottom_profile_textView)
   private TextView bottom_profile_textView;
 
+  @FindViewById(R.id.aSubtitleView)
+  private SubtitleView aSubtitleView;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -123,8 +131,7 @@ public class MainActivity extends AppCompatActivity {
     bottom_weixin_imageView.setSelected(true);
     replaceFragemnt(new MainFragment());
     // 创建媒体播放器
-    ExoPlayerInstance.getInstance(this);
-
+    SimpleExoPlayer instance = ExoPlayerInstance.getInstance(this, aSubtitleView);
   }
 
   /**
@@ -191,27 +198,9 @@ public class MainActivity extends AppCompatActivity {
       mainServices.switchToFragment(this, new PlayerFragment(), bottom_find_imageView, bottom_contact_list_imageView, bottom_weixin_imageView, bottom_profile_imageView);
     }
     if (MessageConstants.play_music.equals(instructions)) {
-      //    simpleExoPlayer.clearMediaItems();
       Integer playIndex = (Integer) message.args.get("play_index");
       List<String> musicList = (List<String>) message.args.get("music_list");
-      List<MediaItem> mediaItems = new ArrayList<>(musicList.size());
-      for (String musicPath : musicList) {
-        MediaItem mediaItem = MediaItem.fromUri(musicPath);
-        mediaItems.add(mediaItem);
-      }
-
-      SimpleExoPlayer simpleExoPlayer = ExoPlayerInstance.getExoPlayer();
-      log.info("simpleExoPlayer:{}", simpleExoPlayer);
-      simpleExoPlayer.clearMediaItems();
-      //添加音频
-      simpleExoPlayer.addMediaItems(mediaItems);
-      //准备播放
-      simpleExoPlayer.prepare();
-      //指定播放索引
-      simpleExoPlayer.seekTo(playIndex, 0);
-      // 开始播放
-      simpleExoPlayer.setPlayWhenReady(true);
-
+      Aop.get(PlayerService.class).playMusic(musicList, playIndex);
     }
   }
 }

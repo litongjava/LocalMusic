@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical">
@@ -54,6 +55,24 @@
       android:layout_width="100dp"
       android:layout_height="wrap_content" />
 
+    <!--        <Button-->
+    <!--          android:id="@+id/checkCurrentTrackBtn"-->
+    <!--          android:layout_width="wrap_content"-->
+    <!--          android:layout_height="wrap_content"-->
+    <!--          android:text="Check"></Button>-->
+
+    <!--    <Button-->
+    <!--      android:id="@+id/checkTextComponentBtn"-->
+    <!--      android:layout_width="wrap_content"-->
+    <!--      android:layout_height="wrap_content"-->
+    <!--      android:text="Check TextComponent" />-->
+
+    <Button
+      android:id="@+id/addSubTitleBtn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Add SubTitle"></Button>
+
   </LinearLayout>
 
   <LinearLayout
@@ -68,10 +87,16 @@
       android:text="load model"></Button>
 
     <Button
-      android:id="@+id/asrBtn"
+      android:id="@+id/asrTestBtn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="ASR"></Button>
+      android:text="ASR Test"></Button>
+
+    <Button
+      android:id="@+id/asrMp3TestBtn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="asrMp3TestBtn"></Button>
 
   </LinearLayout>
 
@@ -86,9 +111,16 @@
       android:layout_height="wrap_content" />
   </LinearLayout>
 
+  <com.google.android.exoplayer2.ui.SubtitleView
+    android:id="@+id/aSubtitleView"
+    android:layout_width="match_parent"
+    android:layout_height="100dp" />
+
   <com.google.android.exoplayer2.ui.StyledPlayerView
     android:id="@+id/styled_player_view"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1" />
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    app:auto_show="true"
+    app:show_timeout="0" />
 </LinearLayout>
