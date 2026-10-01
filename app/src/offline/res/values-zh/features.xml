@@ -1,0 +1,31 @@
+<resources>
+    <string name="opened_audio">"打开的音频"</string>
+    <string name="open_audio_wait">"正在打开音频…"</string>
+    <string name="open_audio_failed">"无法打开音频，请重新选择并授予文件读取权限。"</string>
+    <string name="lyrics_cover">"唱片封面 · 点击查看歌词"</string>
+    <string name="lyrics_loading">"正在读取本地歌词…"</string>
+    <string name="lyrics_empty">"暂无本地歌词\n可在歌曲旁放置同名 .lrc 文件，或导入歌词文件。"</string>
+    <string name="lyrics_import">"导入歌词"</string>
+    <string name="lyrics_back">"返回封面"</string>
+    <string name="lyrics_error">"无法读取歌词，请选择小于 1 MB 的文本或 LRC 文件。"</string>
+    <string name="builtin_music">"内置音乐"</string>
+    <string name="internal_storage">"内部存储 / "</string>
+    <string name="permission_expired">"目录授权失效"</string>
+    <string name="root_unreadable">"无法读取，请在设置中重新授权"</string>
+    <string name="folder_unreadable">"目录读取失败，其他目录仍可使用"</string>
+    <string name="playlist_name_error">"歌单名称需为 1–60 个字符"</string>
+    <string name="note_body_error">"笔记需为 1–5000 个字符"</string>
+    <string name="ui_my">我的</string>
+    <string name="album_options">合集更多选项</string>
+    <string name="album_save">收藏此目录合集</string>
+    <string name="album_unsave">取消收藏合集</string>
+    <string name="rename_file">重命名文件</string>
+    <string name="edit_tags">编辑标签</string>
+    <string name="tags_hint">工作, 访谈, 重要</string>
+    <string name="tags_help">用逗号分隔，最多 20 个标签，每个 40 字。清空可移除全部标签。标签保存在本应用中。</string>
+    <string name="rename_help">修改实际文件名，并保留原扩展名。</string>
+    <string name="rename_readonly">内置音频为只读文件，无法重命名。</string>
+    <string name="rename_invalid">请输入 1–120 个字符，不可包含路径分隔符或文件名保留符号。</string>
+    <string name="rename_done">文件已重命名</string>
+    <string name="rename_failed">无法重命名，可能已存在同名文件或目录只读。请在设置中重新选择目录以授予写入权限。</string>
+</resources>

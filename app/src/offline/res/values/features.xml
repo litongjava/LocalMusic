@@ -1,0 +1,31 @@
+<resources>
+    <string name="opened_audio">"Opened audio"</string>
+    <string name="open_audio_wait">"Opening audio…"</string>
+    <string name="open_audio_failed">"Unable to open this audio. Please share the file again with read access."</string>
+    <string name="lyrics_cover">"Album cover · tap for lyrics"</string>
+    <string name="lyrics_loading">"Loading local lyrics…"</string>
+    <string name="lyrics_empty">"No local lyrics\nAdd a matching .lrc file beside the song, or import a lyrics file."</string>
+    <string name="lyrics_import">"Import lyrics"</string>
+    <string name="lyrics_back">"Back to cover"</string>
+    <string name="lyrics_error">"Unable to read lyrics. Choose a text or LRC file under 1 MB."</string>
+    <string name="builtin_music">"Built-in music"</string>
+    <string name="internal_storage">"Internal storage / "</string>
+    <string name="permission_expired">"Folder access expired"</string>
+    <string name="root_unreadable">"Unable to read; authorize this folder again in Settings"</string>
+    <string name="folder_unreadable">"Unable to read folder; other folders remain available"</string>
+    <string name="playlist_name_error">"Playlist names must contain 1–60 characters"</string>
+    <string name="note_body_error">"Notes must contain 1–5000 characters"</string>
+    <string name="ui_my">My</string>
+    <string name="album_options">Album options</string>
+    <string name="album_save">Save this folder album</string>
+    <string name="album_unsave">Remove saved album</string>
+    <string name="rename_file">Rename file</string>
+    <string name="edit_tags">Edit tags</string>
+    <string name="tags_hint">Work, interview, important</string>
+    <string name="tags_help">Separate tags with commas. Up to 20 tags, 40 characters each. Clear to remove all. Tags stay in this app.</string>
+    <string name="rename_help">Changes the actual filename and keeps its extension.</string>
+    <string name="rename_readonly">Built-in audio is read-only and cannot be renamed.</string>
+    <string name="rename_invalid">Enter 1–120 characters without path separators or reserved filename symbols.</string>
+    <string name="rename_done">File renamed</string>
+    <string name="rename_failed">Unable to rename. The name may already exist or the folder may be read-only. Select the folder again in Settings to grant write access.</string>
+</resources>

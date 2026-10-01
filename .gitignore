@@ -152,3 +152,9 @@ venv/
 .vs/
 Debug/
 netease/
+.local-test/
+
+# Local Android release credentials
+release-signing.properties
+*.jks
+*.keystore

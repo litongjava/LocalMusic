@@ -1,0 +1,4 @@
+storeFile=C:/path/to/your/localmusic-release.jks
+storePassword=YOUR_STORE_PASSWORD
+keyAlias=localmusic
+keyPassword=YOUR_KEY_PASSWORD
